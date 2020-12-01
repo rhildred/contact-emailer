@@ -1,4 +1,18 @@
-const auth = require('./creds.json');
+let auth = {
+    type: "oauth2",
+    user: process.env.USER,
+    clientId: process.env.CLIENTID,
+    clientSecret: process.env.CLIENTSECRET,
+    refreshToken: process.env.REFRESHTOKEN
+}
+try{
+    auth = require('./creds.json');
+    console.log("getting credentials from ./creds.json");
+}catch(e){
+    console.log(e.toString());
+    console.log("getting creds from environment variables");
+}
+
 const nodemailer = require('nodemailer');
 const express = require('express');
 const multer = require('multer');
@@ -40,11 +54,12 @@ app.post('/send', function (req, res) {
         service: 'gmail',
         auth: auth,
     }); 
-    transporter.sendMail(mailOptions, (err, res) => {
+    transporter.sendMail(mailOptions, (err, response) => {
         if (err) {
             return console.log(err);
         } else {
-            console.log(JSON.stringify(res));
+            console.log(JSON.stringify(response));
+            res.end("thank-you for your message");
         }
     });
 })
