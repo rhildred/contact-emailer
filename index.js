@@ -24,7 +24,11 @@ app.post('/send', function (req, res) {
         message: decodeURI(req.body.message)
     }
     res.end(`
-Thank-you for your message ${req.body.name}
+<body>
+    <p>
+        Thank-you for your message <em>${req.body.name}</em>
+    </p>
+</body>
     `);
 
 });
